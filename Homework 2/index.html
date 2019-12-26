@@ -70,15 +70,25 @@
 
 					<div class="card-body">
 						<h5 class="card-title">Название карточки</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					</div>
+
+
+						<p v-if="open_more_description_1"
+								class="card-text">
+							Some quick example text to build on the card title and make up the bulk of the card's content.
+						</p>
+						<p v-else
+						   class="card-text">
+							Для вас Сегодня супер акция всё по:
+						</p>
+
+						</div>
+
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item">Цена {{Math.floor(getRandomInt(100,99999) * 100) / 100}}</li>
 						<li class="list-group-item">Остаток {{getRandomInt(0,100)}}</li>
 					</ul>
 					<div class="card-body">
-						<a href="#" class="card-link">Ссылка карты</a>
-						<a href="#" class="card-link">Другая ссылка</a>
+						<a href="#" class="card-link" v-on:click.prevent="open_more_description_1=!open_more_description_1">Подробнее</a>
 					</div>
 				</div>
 			</div>
@@ -87,15 +97,21 @@
 					<img class="card-img-top" src="https://source.unsplash.com/random/150x180" alt="Card image cap">
 					<div class="card-body">
 						<h5 class="card-title">Название карточки</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						<p v-if="open_more_description_2"
+						   class="card-text">
+							Some quick example text to build on the card title and make up the bulk of the card's content.
+						</p>
+						<p v-else
+						   class="card-text">
+							Для вас Сегодня супер акция всё по:
+						</p>
 					</div>
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item">Цена {{Math.floor(getRandomInt(100,99999) * 100) / 100}}</li>
 						<li class="list-group-item">Остаток {{getRandomInt(0,100)}}</li>
 					</ul>
 					<div class="card-body">
-						<a href="#" class="card-link">Ссылка карты</a>
-						<a href="#" class="card-link">Другая ссылка</a>
+						<a href="#" class="card-link" v-on:click.prevent="open_more_description_2=!open_more_description_2">Подробнее</a>
 					</div>
 				</div>
 			</div>
@@ -107,15 +123,21 @@
 					<img class="card-img-top" src="https://source.unsplash.com/random/150x180" alt="Card image cap">
 					<div class="card-body">
 						<h5 class="card-title">Название карточки</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						<p v-if="open_more_description_3"
+						   class="card-text">
+							Some quick example text to build on the card title and make up the bulk of the card's content.
+						</p>
+						<p v-else
+						   class="card-text">
+							Для вас Сегодня супер акция всё по:
+						</p>
 					</div>
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item">Цена {{Math.floor(getRandomInt(100,99999) * 100) / 100}}</li>
 						<li class="list-group-item">Остаток {{getRandomInt(0,100)}}</li>
 					</ul>
 					<div class="card-body">
-						<a href="#" class="card-link">Ссылка карты</a>
-						<a href="#" class="card-link">Другая ссылка</a>
+						<a href="#" class="card-link" v-on:click.prevent="open_more_description_3=!open_more_description_3">Подробнее</a>
 					</div>
 				</div>
 			</div>
@@ -124,20 +146,25 @@
 					<img class="card-img-top" src="https://source.unsplash.com/random/150x180" alt="Card image cap">
 					<div class="card-body">
 						<h5 class="card-title">Название карточки</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						<p v-if="open_more_description_4"
+						   class="card-text">
+							Some quick example text to build on the card title and make up the bulk of the card's content.
+						</p>
+						<p v-else
+						   class="card-text">
+							Для вас Сегодня супер акция всё по:
+						</p>
 					</div>
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item">Цена: {{Math.floor(getRandomInt(100,99999) * 100) / 100}}</li>
 						<li class="list-group-item">Остаток: {{Math.floor(Math.random() * 100) / 100}}</li>
 					</ul>
 					<div class="card-body">
-						<a href="#" class="card-link">Ссылка карты</a>
-						<a href="#" class="card-link">Другая ссылка</a>
+						<a href="#" class="card-link" v-on:click.prevent="open_more_description_4=!open_more_description_4">Подробнее</a>
 					</div>
 				</div>
 			</div>
 		</div>
-
 	</div>
 
 	<!--Услуги!-->
@@ -188,16 +215,11 @@
 							<button type="submit" v-on:click="vis_executed()">Отправить</button>
 						</form>
 					</div>
-
-
 				</div>
 			</div>
 		</section>
 
 	</div>
-
-
-
 </div>
 
 
@@ -210,7 +232,11 @@
 			picture_carusel1: 'https://source.unsplash.com/random/783x250',
 			picture_carusel2: 'https://source.unsplash.com/random/782x250',
 			picture_carusel3: 'https://source.unsplash.com/random/781x250',
-			execute:false
+			execute:false,
+			open_more_description_1: true,
+			open_more_description_2: true,
+			open_more_description_3: true,
+			open_more_description_4: true,
 		},
 		methods:{
 			getRandomInt:function(min,max){
@@ -220,9 +246,8 @@
 				this.execute = true;
 			}
 		}
-
-
 	})
+
 
 </script>
 

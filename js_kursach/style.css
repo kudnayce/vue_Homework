@@ -1,0 +1,60 @@
+.button {
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	padding: 1px;
+	cursor: pointer;
+	border: solid 1px #fff;
+}
+
+.button:hover {
+	border: solid 1px #f00;
+}
+
+.button:active {
+	border: solid 1px #ff0;
+}
+
+#palette, #canvas {
+	display: inline-block;
+	border: solid 1px #aaa;
+	cursor: default;
+	vertical-align: top;
+}
+
+#palette {
+	width: 95px;
+}
+
+#clear {
+	background: #eee;
+	color: #777;
+	padding: 10px;
+	width: 200px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.container {
+	white-space: normal;
+	width: 1256px;
+}
+
+#instruments img {
+	 width: 32px;
+	 height: 32px;
+	 margin: 5px; padding: 4px; float: left;
+ }
+
+#instruments img:hover{
+	border: 1px solid black;
+}
+
+.active_instrument {
+	background-color: lightblue;
+}
+
+#instruments {
+	display: inline-block;
+	background-color: gray;
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+		  integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+
+<div id="app">
+	Напиши три любимых автомобиля
+	<ul>
+		<li v-for = "str in cars">
+			<input v-if = "str.edit" v-model = "str.title"
+				@keyup.enter = "str.edit=false">
+			<div v-else>
+				<label @click = "str.edit = true">
+					{{str.title}}
+				</label>
+			</div>
+		</li>
+	</ul>
+
+
+
+	<br><br><br>
+	<div class="input-group mb-3">
+		<input
+				type="text"
+				class="form-control"
+				placeholder="Введите название статьи"
+		 v-model="active_articles">
+		</div>
+
+
+	<br>	<br>
+	<div>
+		<div v-for="str in filtredArticles">
+			<h2>{{str.title}}</h2>
+			<img class="card-img-top" v-bind:src="str.img" v-bind:alt="str.name">
+			<p class="card-text">{{str.description}}</p>
+		</div>
+
+	</div>
+
+
+
+
+</div>
+
+
+
+<script>
+	let app = new Vue({
+		el: '#app',
+		data: {
+			cars: [{'title':'Mazda','edit':false},
+				{'title':'Ford','edit':false},
+				{'title':'Запорожец','edit':false}],
+			active_articles:'',
+			articles: [
+				{'title':'Установка vue',
+					'url':'https://ru.vuejs.org/v2/guide/installation.html',
+					'img':'https://im0-tub-ru.yandex.net/i?id=5d4d407ceb1053cc3e42855a7f575946&n=13&exp=1',
+					'description':'Просто скачайте JS-файл и подключите его тегом script на странице. Будет зарегистрирована глобальная переменная Vue.'
+				},
+				{
+					'title':'Инструменты',
+					'url':'https://ru.vuejs.org/v2/guide/installation.html?#%D0%98%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B-%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D0%BD%D0%BE%D0%B9-%D1%81%D1%82%D1%80%D0%BE%D0%BA%D0%B8-CLI',
+					'img':'https://repository-images.githubusercontent.com/218592759/ccd03300-fbc0-11e9-8b09-fb6dbcaba5b1',
+					'description':'Vue.js предоставляет официальный инструментарий для командной строки (CLI) для быстрого создания каркаса амбициозных одностраничных приложений. Предлагаемые шаблоны содержат всё необходимое для организации современной фронтенд-разработки. Всего за несколько минут вы получите работающую конфигурацию с горячей перезагрузкой модулей, линтингом кода при сохранении и настроенной конфигурацией production-сборки. Подробнее вы можете изучить в документации Vue CLI.',
+				},
+				{
+					'title':'Термины',
+					'url':'https://ru.vuejs.org/v2/guide/installation.html?#%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B',
+					'img':'https://i.ytimg.com/vi/MmgswF5GFf8/maxresdefault.jpg',
+					'description':'Термины\n' +
+						'Полная: сборка, которая содержит runtime и компилятор шаблонов.\n' +
+						'\n' +
+						'Компилятор: код, который отвечает за компиляцию строковых шаблонов в render-функции JavaScript.\n' +
+						'\n' +
+						'Runtime: код, который отвечает за создание экземпляров Vue, отрисовку и изменение виртуального DOM и т.д. По сути, это всё, кроме компилятора.\n' +
+						'\n' +
+						'UMD: сборки UMD можно использовать сразу в браузере, подключая тегом <script>. По умолчанию в jsDelivr CDN из https://cdn.jsdelivr.net/npm/vue будет UMD-сборка Runtime + Компилятор (vue.js).\n' +
+						'\n' +
+						'CommonJS: сборки CommonJS предназначены для использования вместе со старыми инструментами сборки, такими как Browserify или Webpack 1. По умолчанию для них (pkg.main) будет сборка Runtime-only CommonJS (vue.runtime.common.js).\n' +
+						'\n' +
+						'ES-модули: начиная с версии 2.6, Vue предоставляет две сборки ES-модулей (ESM):\n' +
+						'\n' +
+						'ESM для сборщиков: предназначена для использования с современными системами сборки, такими как webpack 2 или Rollup. Формат ESM разработан для статического анализа, поэтому сборщики могут воспользоваться преимуществами «tree-shaking» и удалить неиспользуемый код из финальной сборки. Файл по умолчанию для этих сборщиков (pkg.module) — это Runtime-only сборка для ES-модулей (vue.runtime.esm.js).\n' +
+						'\n' +
+						'ESM для браузеров (только 2.6.0+): предназначена для импорта в современных браузерах через <script type="module">.',
+				},
+				{
+					'title':'Синтаксис шаблонов',
+					'url':'https://ru.vuejs.org/v2/guide/syntax.html',
+					'img':'https://yandex.ru/images/_crpd/lhhU5x450/21546dTd2OQ/R30iM6ndxZqjjOkC137Dkt9x-dhPpF3AT6SSKSEMxCGAHLoC-IN9qk-EJqaygnoNVi1g64OXN2H4WhltxLJiREc6traqCpfetg6-FQ',
+					'description':'Для связывания DOM с данными экземпляра Vue использует синтаксис, основанный на HTML. Все шаблоны Vue являются валидным HTML-кодом, который могут распарсить все HTML-парсеры и браузеры.',
+				},
+
+				{
+					'title':'Модификаторы',
+					'url':'https://ru.vuejs.org/v2/guide/syntax.html#%D0%9C%D0%BE%D0%B4%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%82%D0%BE%D1%80%D1%8B',
+					'img':'https://im0-tub-ru.yandex.net/i?id=5ffdec53837f3e60aed92193a50fe231&n=13&exp=1',
+					'description':'Модификаторы — особые постфиксы, добавляемые после точки, обозначающие, что директива должна быть связана каким-то определённым образом. Например, модификатор .prevent говорит директиве v-on вызвать event.preventDefault() при обработке произошедшего события:',
+				},
+
+			],
+
+			articles_search:[],
+		},
+
+		computed: {
+			filtredArticles(){
+				let arr = [];
+				let regExp = new RegExp( ".*" + this.active_articles + ".*" , "i")
+				for(let i = 0; i < this.articles.length; i++){
+					if(regExp.test(this.articles[i].title)){
+						arr.push(this.articles[i])
+					}
+				}
+				return arr;
+			}
+		}
+	})
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+		crossorigin="anonymous"></script>
+</body>
+</html>

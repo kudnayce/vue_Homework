@@ -1,0 +1,178 @@
+<html>
+    <head>
+        <meta charset="utf-8"></meta>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+        <link rel="stylesheet" href="../css/animation.css">
+        <style scoped>
+            a {
+                text-decoration: none;
+                color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <admin-header></admin-header>
+            <main>
+                <div>
+                    <transition name="fade" mode="out-in" appear>
+                        <router-view></router-view>
+                    </transition>
+                </div>
+            </main>
+        </div>
+        <script>    
+            const Header = {
+                data: function(){
+                    return {
+                        sitename: 'Панель администратора: Магазин 404 - найдётся всё для IT-шников!'
+                    };
+                },
+                template: `<header>
+                    <h1><router-link :to="{name:'adminMain'}">{{sitename}}</router-link></h1>
+                </header>`              
+            };
+            
+            const Navigator = {
+                template: `<div><router-link :to="{name:'products'}">Книги</router-link></div>`
+            };
+            
+            const Product = {
+                template: `<div class="row mb-3">
+                    <div>
+                        <figure>
+                            <img v-bind:src="product.image"> 
+                        </figure>
+                    </div>
+                    <div>
+                        <h1 v-text="product.title"></h1>
+                        <p v-html="product.description"><p>
+                        <p>Автор: {{product.author}}</p>
+                        <p>Издательство: {{product.publishing}}<p>
+                        <p>Год: {{product.year}}</p>
+                        <p>Количество страниц: {{product.pages}}</p>
+                        <p>Стоимость: {{product.price | formatPrice}}</p>
+                        <button v-on:click="edit(product)">Реадктировать описание</button>
+                        <button v-on:click="del(product)">Удалить книгу</button>               
+                        <span>Осталось {{product.availableInventory}}</span>
+                        <span v-for="(n, index) in 5" v-bind:key="index">{{checkRating(n, product)}}</span>
+                    </div>
+                </div>`,
+                props:['product', 'cartCountFn'],
+                methods:{
+                    checkRating: function(n, product){
+                        return (product.rating - n >= 0)? String.fromCharCode(9733): String.fromCharCode(9734);
+                    },
+                    edit: function(product){
+                        router.push({name:'edit', params:{id:product.id}});
+                    },
+                    del: function(product){
+                        router.push({name:'delete', params:{id:product.id}});
+                    }
+                    
+                },
+                filters: {
+                    formatPrice: function(val){
+                        if(!parseInt(val)) return '';
+                        let arr = val.toString().split("");
+                        let index = 3;
+                        while(arr.length > index){
+                            arr.splice(arr.length - index, 0, " ");
+                            index += 4;
+                        }
+                        return arr.join("") + ' ' + String.fromCharCode(8381);
+                    }
+                }            
+            };
+            
+            const AllProducts = {
+                template: `<div>
+                    <button v-on:click="newBook">Добавить новую книгу</button>
+                    <product v-for="product in sortedProducts"
+                        :key="product.id" 
+                        :product="product"></product>
+                </div>`,
+                components: { 'product': Product },
+                data: function(){
+                    return {
+                        products:[]
+                    }
+                },
+                methods:{
+                    newBook: function(){
+                        router.push({name:'new'});
+                    }
+                },
+                computed: {
+                    sortedProducts: function(){
+                        if(this.products.length > 0) {
+                            let productsArray = this.products.slice(0);
+                            
+                            function compare(a, b){
+                                let titleA = a.title.toLowerCase(),
+                                    titleB = b.title.toLowerCase()
+                                if(titleA > titleB)
+                                    return 1;
+                                if (titleA < titleB) {
+                                    return -1; 
+                                }
+                                return 0;
+                            }
+                            
+                            return productsArray.sort(compare);
+                        }                        
+                    }
+                },
+                created: function(){
+                    fetch('/data/product.json')
+                        .then(response => response.json())
+                        .then(products =>{
+                            this.products = products;
+                            for(let i = 0; i < this.products.length; i++)
+                                this.products[i].image = '/' + this.products[i].image;
+                        });                        
+                }
+            };           
+            
+            const AddNewBook = {
+                template: `<div>Добавление новой книги</div>`
+            };
+            
+            const EditBook = {
+                props:['id'],
+                template: `<div>Редактирование книги c id {{id}}</div>`
+            }
+            
+            const DeleteBook = {
+                props:['id'],
+                template: `<div>Удаление книги c id {{id}}</div>`
+            };
+                  
+            const routes = [
+                { path: '/admin/', component: Navigator, name: 'adminMain' },
+                { 
+                  path: '/admin/products', 
+                  component: AllProducts, 
+                  name: 'products',
+                },              
+                { path: '/admin/products/new', component: AddNewBook, name:'new'},
+                { path: '/admin/products/:id/edit', component: EditBook, name:'edit', props:true},
+                { path: '/admin/products/:id/delete', component: DeleteBook, name:'delete', props: true}
+            ];
+        
+            const router = new VueRouter({
+                mode: 'history',
+                routes: routes
+            })        
+        
+            let webStore = new Vue({
+                el: '#app',
+                router: router,
+                components: {
+                    'admin-header': Header
+                }
+            });            
+        </script>
+    </body>
+</html>
